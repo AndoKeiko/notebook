@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>MemoPad × mnemonic</title>
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap"
+      rel="stylesheet"> -->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous">
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/map.css">
+
+  </head>
+  <body>
+
+    <!-- MAP[START] -->
+    <h1 class="h1">MemoPad × mnemonic <a id="mnemonic-btn" class="mnemonic-btn"
+        target="_blank">記憶術場所法とは？</a></h1>
+    <div id="popup-wrapper02" class="popup-wrapper">
+      <div id="popup-inside02" class="popup-inside">
+        <div id="popup-close02" class="popup-close">×</div>
+        <div id="message02" class="message">
+          <h2 id="popup-title02" class="popup-title02">記憶術場所法とは</h2>
+          <p id="popup-q"
+            class="popup-q">場所法とは、私たちの脳が情報を記憶する際に活用する有力な手法の一つです。脳の記録容量は14.5テラバイトとされており、この膨大な容量を持つ脳はほぼすべての人が共有しています。しかし、その情報を必要な時に効果的に引き出すことができるかどうかが、記憶力の差を生み出します。<br><br>
+
+            場所法では、他の情報と結び付けて覚えることが重要です。場所は生き物にとって極めて重要な情報であり、外敵に出会った場所や食料を得た場所などは生存に直結します。このような理由から、脳は場所の情報を覚えることに優れています。<br><br>
+
+            具体的には、「場所細胞」と呼ばれる神経細胞が記憶の「紐付け」の索引として活用されます。海馬という記憶の情報処理の要となる器官の神経細胞の20％もが場所細胞で占められています。そのため、場所の情報と結び付けて覚えることで、記憶力を数倍に増強することができると考えられます。<br><br>
+
+            要するに、情報を場所と結び付けて覚えることで、必要な情報を引き出しやすくなるのです。</p>
+        </div></div></div>
+    <div id="geocode">ReverseGeocode:data</div>
+    <div id="map" style='width:100%;height:97%;float:left;'></div>
+    <div id="json_box"></div>
+    <!-- MAP[END] -->
+    <!-- JQuery -->
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script
+      src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AqjcOy5RSUYE1PdyrNDxWjk0kkezoIW_coZaPFzxZhZxbhmL3hWfeYJqSGbjhWz2'
+      async defer></script>
+    <script src="./js/BmapQuery.js"></script>
+    <script>
+      $("#mnemonic-btn").on("click", function(){
+        $("#popup-wrapper02").toggleClass('active');
+      });
+      $("#popup-wrapper02").on("click", function(){
+        $("#popup-wrapper02").removeClass("active");
+      });
+function GetMap() {
+  let pin;
+  let map = new Bmap("#map");
+
+  // 位置情報の監視を開始
+  const watchId = navigator.geolocation.watchPosition(function (data) {
+    lat = data.coords.latitude;
+    lon = data.coords.longitude;
+    console.log(lat);
+    console.log(lon);
+    // マップを更新
+    map.startMap(lat, lon, "load", 15);
+    // ピンを更新
+    if (pin) {
+      map.deletePin(pin);
+    }
+    pin = map.pinIcon(lat, lon, "./img/poi_custom.png", 1.0, 0, 0);
+    // 逆ジオコーディング
+    let location = map.setLocation(lat, lon);
+    map.reverseGeocode(location, function (data) {
+      console.log(data);
+      document.querySelector("#geocode").innerHTML = data;
+        var result = data.split(',')[1];
+        let geo_name = fetchFacilityName(result);
+        document.querySelector("#geocode").innerHTML = data;
+      const event = new CustomEvent('locationUpdated', { detail: { lat: lat, lon: lon, geocode: data } });
+      document.dispatchEvent(event);
+    });
+
+    // JSONデータの取得と処理
+
+    let jsonData = localStorage.getItem('jsonData');
+    const style = {
+                pinColor:"#0000ff",
+                fillColor:"rgba(0,0,100,0.4)",
+                strokeWidth:10
+        };
+    console.log(jsonData);
+    if (jsonData) {
+      let data = JSON.parse(jsonData);
+      console.log(data);
+      document.getElementById('json_box').textContent = JSON.stringify(data, null, 2); // データを整形して表示
+      data.forEach(Location => {
+        console.log(Location.location);
+        map.circleSet(Location.location.lat, Location.location.lon, 500, style);
+        let distance = calculateDistance(lat,lon,Location.location.lat, Location.location.lon);
+        if (distance <= 500) {
+          // alert(`現在地が${Location.location.geocode}の500メートル以内に入りました。`);
+          // alert(`問題です。${Location.title}とは？`);
+          let html = '<div id="popup-wrapper" class="popup-wrapper">';
+          html += '<div id="popup-inside" class="popup-inside">';
+          html += '<div id="popup-close" class="popup-close">×</div><div id="message" class="message">';
+          html += '<p id="popup-title" class="popup-title">現在地が<br><span>'+ Location.location.geocode +'</span><br>の500メートル以内に入りました。</p>';
+          html += '問題<br><h2>「'+ Location.title +'」とは？</h2>';
+          html += '<p id="popup-q" class="popup-q">答えを見る(クリック）</p>';
+          html += '<p id="popup-a" class="popup-a">'+ Location.text +'</p>';
+          html += '</div></div></div>';
+          $("body").prepend(html);
+          $("#popup-wrapper").siblings().remove();
+          $("#popup-wrapper").addClass('active');
+        }
+      });
+      $("#popup-close").on("click", function(){
+        $("#popup-wrapper").removeClass("active");
+      });
+      $("#popup-q").on("click", function(){
+        $("#popup-a").toggleClass("active");
+      });
+
+    } else {
+      console.error('No JSON data found');
+    }
+   
+  }, function (error) {
+    console.error('Geolocation error:', error);
+  }, {
+    enableHighAccuracy: true,
+    timeout: 30000,
+    maximumAge: 0
+  });
+
+  function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371e3; // 地球の半径（メートル）
+        const φ1 = lat1 * Math.PI/180; // φ, λ in radians
+        const φ2 = lat2 * Math.PI/180;
+        const Δφ = (lat2-lat1) * Math.PI/180;
+        const Δλ = (lon2-lon1) * Math.PI/180;
+
+        const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                  Math.cos(φ1) * Math.cos(φ2) *
+                  Math.sin(Δλ/2) * Math.sin(Δλ/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return R * c; // in metres
+      }
+      
+  function fetchFacilityName(address) {
+  const url = new URL('https://nominatim.openstreetmap.org/search');
+  const params = {
+    q: address, // 検索クエリに住所を指定
+    format: 'json', // レスポンスの形式をJSONに指定
+    addressdetails: 1 // 詳細な住所情報を取得
+  };
+  url.search = new URLSearchParams(params).toString();
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.length > 0) {
+        console.log('施設名:', data[0].display_name); // 最初の検索結果の表示名
+      } else {
+        console.log('該当する施設が見つかりませんでした。');
+      }
+    })
+    .catch(error => console.error('エラーが発生しました:', error));
+}
+
+
+  // 監視を停止する場合
+  // navigator.geolocation.clearWatch(watchId);
+}
+</script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="./js/app.js" type="module"></script>
+
+  </body>
+</html>

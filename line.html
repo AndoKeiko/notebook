@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+      .container {
+    height: 300px;
+    background-color: gray;
+    overflow: scroll;
+    padding: 2px 4px;
+  }
+
+  .child {
+    height: 55px;
+    width: 90%;
+    background-color: white;
+    border: 1px black solid;
+    border-radius: 8px;
+    margin-bottom: 4px;
+  }
+  </style>
+</head>
+<body>
+  <form id="form" action="" method="get" accept-charset="utf-8">
+    <input type="text" name="input" id="input" value="" />
+    <button id="button" type="submit">追加</button>    
+  </form>
+  <div id="container" class='container'>
+  </div>
+  <script>
+window.onload = function() {
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+    var container = document.getElementById('container');
+    
+    // チャットを追加する
+    var addChat = () => {
+      var text = input.value;
+      var div = document.createElement("div");
+      div.innerText = text;
+      div.classList.add('child');
+      container.appendChild(div);
+      input.value = '';
+    };
+    
+    // 下までスクロールする
+    var scrollToBottom = () => {
+      container.scrollTop = container.scrollHeight;
+      console.log(container.scrollTop);
+      console.log(container.scrollHeight);
+    };
+    
+    // 一番下までスクロールしているかどうか
+    var isScrollBottom = () => {
+      return Math.abs(container.scrollHeight - (container.scrollTop + container.offsetHeight)) <= 1;
+    };
+    
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      // 一番下までスクロールされていれば追加後も一番下までスクロールする
+      if (isScrollBottom()) {
+        alert("動かん");
+        addChat();
+        scrollToBottom();
+      }
+      // 一番下までスクロールされていなければスクロールしない
+      else {
+        addChat();
+      }
+    });
+  };
+
+  </script>
+</body>
+</html>

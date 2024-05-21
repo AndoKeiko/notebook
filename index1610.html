@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenAI API Example</title>
+</head>
+<body>
+  <h1>OpenAI APIを利用する例</h1>
+  <textarea id="input" rows="4" cols="50"></textarea>
+  <button id="submit">送信</button>
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById('submit').addEventListener('click', async () => {
+      const input = document.getElementById('input').value;
+
+      const response = await fetch('http://127.0.0.1:3000/api/openai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          prompt: input,
+          max_tokens: 100
+        })
+      });
+
+      const data = await response.json();
+      document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monaco Editor</title>
+    <link rel="stylesheet"
+      href="https://unpkg.com/monaco-editor/min/vs/editor/editor.main.css">
+  </head>
+  <body>
+    <div id="container"
+      style="width:800px;height:600px;border:1px solid grey"></div>
+    <script src="https://unpkg.com/monaco-editor/min/vs/loader.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            monaco.editor.create(document.getElementById('container'), {
+                value: [
+                    'function hello() {',
+                    '\talert("Hello world!");',
+                    '}'
+                ].join('\n'),
+                language: 'javascript'
+            });
+        });
+    </script>
+    <script>
+      async function callOpenChatAPI(prompt) {
+    const apiKey = 'sk-proj-iBRMOpFOzmFXZsOZfBVzT3BlbkFJ7dEnDCP1hBNMB4mZK9jc'; // ここにAPIキーを入力
+    const response = await fetch('https://api.openchat.example.com/v1/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            prompt: prompt,
+            max_tokens: 100
+        })
+    });
+
+    const data = await response.json();
+    return data;
+}
+
+// Monacoエディタの内容を取得し、OpenChat APIを呼び出す例
+document.getElementById('container').addEventListener('keyup', async (event) => {
+    const editorContent = monaco.editor.getModels()[0].getValue();
+    const chatResponse = await callOpenChatAPI(editorContent);
+    console.log(chatResponse);
+});
+
+    </script>
+  </body>
+</html>

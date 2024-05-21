@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Firebase:v9:Chatアプリ</title>
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+
+<div>
+    <div> 名前：<input type="text" id="uname"> </div>
+    <div>
+        <textarea id="text" cols="30" rows="10"></textarea>
+        <button id="send">送信</button>
+    </div>
+    <div id="output" style="overflow: auto;height: 300px;"></div>
+</div>
+<!--/ コンテンツ表示画面 -->
+
+
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- JQuery -->
+
+
+<!--** 以下Firebase **-->
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+  import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved } 
+  from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAtRdQQ1imVBgWwQPYpPnuIU7d_-jRPlRs",
+    authDomain: "gsdemo-4d319.firebaseapp.com",
+    projectId: "gsdemo-4d319",
+    storageBucket: "gsdemo-4d319.appspot.com",
+    messagingSenderId: "270823072945",
+    appId: "1:270823072945:web:9c4b3c8932d8cb24a2ae90"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app); //RDBを使うよって意味
+  const dbRef = ref(db, "chat"); //RDBの"Chat"を使うよ
+
+  //送信
+  $("#send").on("click", function(){
+    // const uname = $("#uname").val();
+    // const text = $("#text").val();
+    // alert(uname+text);
+    const msg = {
+      uname: $("#uname").val(),
+      text: $("#text").val()
+    }
+    const data = push(dbRef);
+    set(data, msg);
+    $("#output").scrollTop($("#output")[0].scrollHeight);
+  });
+
+  //受信
+  onChildAdded(dbRef, function(data){
+    const msg = data.val(); //ここでデータ取得
+    const key = data.key;
+    console.log(msg);
+    let h = '<p>';
+        h += msg.uname;
+        h += '<br>';
+        h += msg.text;
+        h += '</p>';
+    $("#output").append(h);
+  });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

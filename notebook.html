@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>MemoPad × mnemonic</title>
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap"
+      rel="stylesheet"> -->
+
+    <!-- <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://use.fontawesome.com/releases/v6.2.0/css/all.css"
+      rel="stylesheet">
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/notebook.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  </head>
+  <body class="body" id="notebook">
+    <div class="content_wrap">
+      <nav class="side_nav">
+        <div class="header-top">
+          <div class="header-top-left">
+            <h1 class="h1">MemoPad × mnemonic</h1></div>
+          <!-- <div id="side_open_btn"><i class="bi bi-chevron-right"></i></div> -->
+          <div id="side_open_btn"></div>
+          <div class="header-top-right">
+            <div class="user_info">
+              <div class="user_info_top">
+                <div id="status"> Login... </div>
+                <p class="user_icon"><img src id="prof"></p>
+                <p class="user_name"><span id="uname"></span><span
+                    id="umail"></span></p>
+              </div>
+              <button id="out"><i class="bi bi-box-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="side_nav_list">
+          <a href="notebook.html" class="search_function_item"><span><i
+                class="bi bi-house-door"></i></span>ホーム</a>
+          <a href="stock.html" class="search_function_item"><span><i
+                class="bi bi-card-text"></i></span>ストック</a>
+          <!-- <a href="js_memo.html" class="search_function_item"><span><i class="bi bi-journal-text"></i></span>ノート</a>
+          <a href="draw.html" class="search_function_item"><span><i class="bi bi-palette"></i></span>おえかき</a>
+          <a href="" class="search_function_item"><span><i class="bi bi-controller"></i></span>ゲーム</a> -->
+        </div>
+      </nav>
+      <main class="main" id="main_notebook">
+        <!-- <div id="side_notebook"></div> -->
+        <!-- <div id="contextArea">右クリックしてメニューを表示</div> -->
+        <div class="editer_wrap">
+          <div class="editor_btn">
+            <button type="button" id="editor_btn_save" title="保存"><i
+                class="fa-solid fa-floppy-disk"></i></button>
+            <!-- <button type="button" id="editor_btn_delete"><i class="bi bi-trash3"></i></button> -->
+            <button type="button" id="editor_btn_clear" title="クリア"><i
+                class="bi bi-stars"></i></button>
+          </div>
+          <div class="tabs">
+            <div class="tab active" data-target="content1">ノート</div>
+            <div class="tab" data-target="content2">エディタ</div>
+            <div class="tab" data-target="content3">画像保存</div>
+            <div class="tab" data-target="content4">画像からソース</div>
+          </div>
+          <div id="content1" class="tab-content" style="display: block;">
+            <div id="editor_title" cols="50" class="resizable"
+              contenteditable="true"></div>
+            <div id="editor_text" cols="50" class="resizable"
+              contenteditable="true"></div>
+            <input type="hidden" id="hidden_editor_title" />
+            <input type="hidden" id="hidden_editor_text" />
+          </div>
+          <div id="content2" class="tab-content" style="display: none;">
+            <textarea id="editor_title02" cols="50"
+              placeholder="タイトル"></textarea>
+            <h3>HTMLコード</h3>
+            <textarea id="html-code"
+              placeholder="ここにHTMLコードを貼り付けてください"></textarea>
+            <h3>CSSコード</h3>
+            <textarea id="css-code"
+              placeholder="ここにCSSコードを貼り付けてください"></textarea>
+            <h3>JavaScriptコード</h3>
+            <textarea id="js-code"
+              placeholder="ここにJavaScriptコードを貼り付けてください"></textarea>
+            <a id="preview-button">プレビュー</a>
+            <iframe id="preview-frame"></iframe></div>
+          <div id="content3" class="tab-content" style="display: none;">
+            <div id="paste-area" contenteditable="true">ここに画像を貼り付けてください</div>
+            <!-- <textarea id="img_text" cols="50"></textarea> -->
+            <div id="image-board"></div>
+          </div>
+          <div id="content4" class="tab-content" style="display: none;">
+            <div id="paste-area" contenteditable="true">ここに画像を貼り付けてください</div>
+            <p>工事中 ボタンを押すとサンプルソースを作るページを作成予定</p>
+            <!-- <style>こういうのをと思ったけど出来が良すぎるのでコメントアウト
+            #content4_iframe {
+              width: 100%;
+              height: 100vh;
+            }</style>
+            <iframe src="https://screenshottocode.com/" allowfullscreen id="content4_iframe"></iframe> -->
+          </div>
+          <!-- <div id="editor_text" contenteditable="true"></div> -->
+        </div>
+        <div id="ai_box">
+          <textarea id="ai_input" rows="4" cols="50"
+            placeholder="AIに聞いてみよう"></textarea>
+          <button id="ai_send">送信</button>
+          <h2>結果:</h2>
+          <div id="ai_result"></div>
+        </div>
+        <!-- <ul id="submenu">
+          <li>オプション1</li>
+          <li>オプション2</li>
+          <li>オプション3</li>
+        </ul> -->
+
+        <!-- ここにチャット機能追加 -->
+        <div class="chat-wrap" id="chat-wrap">
+          <div class="chat-header">全文検索<span class="chat-btn"><i
+                class="fa-solid fa-arrows-up-to-line"></i></span></div>
+          <section role="list" class="chat-area" id="chat-area">
+          </section>
+          <div class="chat-message-area">
+            <div class="chat-message-area-text">
+              <textarea id="chat-text"></textarea>
+            </div>
+            <div class="chat-message-area-button">
+              <button id="send_chat" class="disabled-button"><i
+                  class="bi bi-send"></i></button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- JQuery -->
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script
+      src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    <!-- JQuery -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script> -->
+
+    <!--** 以下Firebase **-->
+    <!-- <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"></script> -->
+    <script src="./js/app-notebook.js" type="module"></script>
+    <!-- <script src="./js/top.js" type="module"></script> -->
+    <script src="./js/notebook.js" type="module"></script>
+    <!-- <script src="./js/map.js"></script> -->
+    <script>
+        document.getElementById('ai_send').onclick = sendRequest;
+        async function sendRequest() {
+          const inputText = document.getElementById('ai_input').value;
+          const apiKey = 'sk-proj-iBRMOpFOzmFXZsOZfBVzT3BlbkFJ7dEnDCP1hBNMB4mZK9jc';
+
+          const response = await fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${apiKey}`
+              },
+              body: JSON.stringify({
+                  model: 'gpt-3.5-turbo', // 使用するモデル名を指定します
+                  messages: [
+                      { role: "system", content: "You are a helpful assistant." },
+                      { role: "user", content: inputText }
+                  ],
+                  max_tokens: 500
+              })
+          });
+
+          if (!response.ok) {
+              const errorText = await response.text();
+              document.getElementById('ai_result').innerText = `Error: ${response.status} - ${errorText}`;
+              return;
+          }
+
+          const data = await response.json();
+          console.log(data);
+          document.getElementById('ai_result').innerText = data.choices[0].message.content;
+      }
+      // タブのクリックイベントを設定
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+          const activeContent = document.getElementById(this.dataset.target);
+          activeContent.style.display = 'block';
+          document.getElementById('editor_btn_save').className = '';
+          document.getElementById('editor_btn_save').classList.add(this.dataset.target);
+        });
+      });
+
+// 初期設定として最初のタブをアクティブにする
+document.querySelector('.tab').click();
+  
+
+    </script>
+  </body>
+</html>

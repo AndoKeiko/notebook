@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>方角アプリ</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+.container {
+    text-align: center;
+}
+#compass {
+    width: 200px;
+    height: 200px;
+    border: 5px solid #000;
+    border-radius: 50%;
+    position: relative;
+    margin: 20px auto;
+}
+#needle {
+    width: 4px;
+    height: 100px;
+    background-color: red;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: bottom;
+    transform: translate(-50%, -100%);
+}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>方角アプリ</h1>
+      <div id="compass">
+        <div id="needle"></div>
+      </div>
+      <p id="direction">方角: <span id="heading">0</span>°</p>
+    </div>
+    <script>
+      // script.js
+window.addEventListener('deviceorientation', function(event) {
+    let alpha;
+
+    if (event.webkitCompassHeading) {
+        // iOS対応
+        alpha = event.webkitCompassHeading;
+    } else {
+        // Android対応
+        alpha = event.alpha;
+        if (event.absolute) {
+            alpha = 360 - alpha; // 北向きに調整
+        }
+    }
+
+    // 方角の更新
+    document.getElementById('heading').textContent = Math.round(alpha);
+
+    // 針の回転
+    const needle = document.getElementById('needle');
+    needle.style.transform = `translate(-50%, -100%) rotate(${alpha}deg)`;
+});
+
+    </script>
+  </body>
+</html>

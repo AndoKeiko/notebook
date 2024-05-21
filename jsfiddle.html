@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSFiddle Like Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <style>
+        .editor-container {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .output-container {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .buttons {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="editor-container">
+        <textarea id="htmlEditor" placeholder="HTMLコードを入力してください"></textarea>
+    </div>
+    <div class="editor-container">
+        <textarea id="cssEditor" placeholder="CSSコードを入力してください"></textarea>
+    </div>
+    <div class="editor-container">
+        <textarea id="jsEditor" placeholder="JavaScriptコードを入力してください"></textarea>
+    </div>
+    <div class="buttons">
+        <button onclick="runCode()">実行</button>
+        <button onclick="saveCode()">保存</button>
+    </div>
+    <div class="output-container" id="output"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script>
+        const htmlEditor = CodeMirror.fromTextArea(document.getElementById('htmlEditor'), {
+            mode: 'text/html',
+            lineNumbers: true,
+            theme: 'default'
+        });
+
+        const cssEditor = CodeMirror.fromTextArea(document.getElementById('cssEditor'), {
+            mode: 'text/css',
+            lineNumbers: true,
+            theme: 'default'
+        });
+
+        const jsEditor = CodeMirror.fromTextArea(document.getElementById('jsEditor'), {
+            mode: 'text/javascript',
+            lineNumbers: true,
+            theme: 'default'
+        });
+
+        function runCode() {
+            const htmlCode = htmlEditor.getValue();
+            const cssCode = cssEditor.getValue();
+            const jsCode = jsEditor.getValue();
+            const output = document.getElementById('output');
+
+            const iframe = document.createElement('iframe');
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+
+            output.innerHTML = '';
+            output.appendChild(iframe);
+
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(`
+                <!DOCTYPE html>
+                <html lang="ja">
+                <head>
+                    <style>${cssCode}</style>
+                </head>
+                <body>
+                    ${htmlCode}
+                    <script>${jsCode}<\/script>
+                </body>
+                </html>
+            `);
+            iframeDoc.close();
+        }
+
+        function saveCode() {
+            const htmlCode = htmlEditor.getValue();
+            const cssCode = cssEditor.getValue();
+            const jsCode = jsEditor.getValue();
+
+            localStorage.setItem('htmlCode', htmlCode);
+            localStorage.setItem('cssCode', cssCode);
+            localStorage.setItem('jsCode', jsCode);
+
+            alert('コードが保存されました');
+        }
+
+        function loadCode() {
+            const htmlCode = localStorage.getItem('htmlCode');
+            const cssCode = localStorage.getItem('cssCode');
+            const jsCode = localStorage.getItem('jsCode');
+
+            if (htmlCode) htmlEditor.setValue(htmlCode);
+            if (cssCode) cssEditor.setValue(cssCode);
+            if (jsCode) jsEditor.setValue(jsCode);
+        }
+
+        window.onload = loadCode;
+    </script>
+</body>
+</html>

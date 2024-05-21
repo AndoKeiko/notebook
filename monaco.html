@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monaco Editor with OpenAI</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+</head>
+<body>
+  <div id="editor"></div>
+  <script>
+    // OpenAI APIのエンドポイント
+    const openaiApiUrl = 'https://api.openai.com/v1/chat/completions';
+    const apiKey = 'sk-proj-iBRMOpFOzmFXZsOZfBVzT3BlbkFJ7dEnDCP1hBNMB4mZK9jc';
+
+    // Monacoエディタの初期化
+    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs' }});
+    require(['vs/editor/editor.main'], function() {
+      const editor = monaco.editor.create(document.getElementById('editor'), {
+        value: '',
+        language: 'javascript',
+        theme: 'vs-dark'
+      });
+
+      // エディタの内容が変更されたときにOpenAI APIにリクエスト
+      // editor.onDidChangeModelContent(async (event) => {
+      //   const content = editor.getValue();
+      //   const completion = await getOpenAICompletion(content);
+      //   if (completion) {
+      //     // 補完結果をエディタに表示
+      //     editor.setValue(content + completion);
+      //   }
+      // });
+    });
+
+    // OpenAI APIにリクエストを送信する関数
+    async function getOpenAICompletion(prompt) {
+  try {
+    const response = await fetch(openaiApiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        prompt: prompt,
+        max_tokens: 50,
+        n: 1,
+        stop: null,
+        temperature: 0.7
+      })
+    });
+    const data = await response.json();
+    if (!data.choices || data.choices.length === 0) {
+      console.error('No choices returned:', data);
+      return '';
+    }
+    return data.choices[0].text;
+  } catch (error) {
+    console.error('Error:', error);
+    return '';
+  }
+}
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs/loader.js"></script>
+  <style>
+    #editor {
+      width: 800px;
+      height: 600px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</body>
+</html>

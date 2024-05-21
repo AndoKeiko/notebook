@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>MemoPad × mnemonic</title>
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap"
+      rel="stylesheet"> -->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous">
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+      <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/top.css">
+    <script
+      src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AqjcOy5RSUYE1PdyrNDxWjk0kkezoIW_coZaPFzxZhZxbhmL3hWfeYJqSGbjhWz2'
+      async defer></script>
+    <script src="./js/BmapQuery.js"></script>
+
+  </head>
+  <body class="body">
+    <div class="content_wrap">
+      <main class="main" id="main_top">
+        <div id="content"></div>
+<!-- 
+        <div id="memo_list" class="memo_list">
+
+        </div>
+        <div id="add_label_wrap" class="add_label_wrap"><h2
+            class="add_label_title">ラベルの編集</h2>
+          <div class="add_label_form_box" id="add_label_form_box"><button
+              id="clear_label_btn" class="clear_label_btn"><i
+                class="bi bi-x"></i></button><input type="text"
+              id="add_label_input" class="add_label_input"
+              placeholder="新しいラベルを作成"><button id="add_label_btn"
+              class="add_label_btn"><i
+                class="bi bi-check-lg"></i></button></div><ul
+            id="add_label_list" class="add_label_list"></ul><div
+            id="label_form_btn" class="label_form_btn">完了</div></div>
+
+        <div id="add_label_wrap02" class="add_label_wrap">
+          <h2 class="add_label_title">メモにつけるラベル</h2><ul id="add_label_list02"
+            class="add_label_list02"></ul><div id="label_form_btn"
+            class="label_form_btn">完了</div></div>
+
+        <div id="add_label_wrap03" class="add_label_wrap">
+          <h2 class="add_label_title">地図から場所を取得する</h2>
+          <div id="geocode">ReverseGeocode:data</div>
+          <div id="map"></div>
+          <ul class="map_form_box">
+            <li id="map_clear_btn" class="map_form_btn"><i
+                class="bi bi-trash3"></i></li>
+            <li id="map_decision_btn" class="map_form_btn"><i
+                class="bi bi-check-circle"></i></li>
+            <li id="map_close_btn" class="map_form_btn">完了</li>
+          </ul>
+          <input type="hidden" name id="lat_hidden">
+          <input type="hidden" name id="lon_hidden">
+          <input type="hidden" name id="geo_hidden">
+        </div> -->
+
+        <!-- ここにチャット機能追加 -->
+        <div class="chat-wrap" id="chat-wrap">
+          <div class="chat-header">全文検索<span class="chat-btn"><i
+                class="bi bi-journal-arrow-up"></i></span></div>
+          <section role="list" class="chat-area" id="chat-area">
+          </section>
+          <div class="chat-message-area">
+            <div class="chat-message-area-text">
+              <textarea id="chat-text"></textarea>
+            </div>
+            <div class="chat-message-area-button">
+              <button id="send_chat" class="disabled-button"><i
+                  class="bi bi-send"></i></button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- JQuery -->
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script
+      src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    <!-- JQuery -->
+
+    <!--** 以下Firebase **-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"></script>
+    <script src="./js/app.js" type="module"></script>
+    <!-- <script src="./js/top.js" type="module"></script> -->
+    <script src="./js/top.js"></script>
+    <script src="./js/map.js"></script>
+
+  </body>
+</html>

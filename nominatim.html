@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nominatim</title>
+  <link rel="icon" type="image/png" href="theme/favicon-194x194.png" sizes="194x194">
+  <link rel="icon" type="image/png" href="theme/favicon-32x32.png" sizes="32x32">
+  <link rel="stylesheet" href="build/bundle.css">
+  <link rel="stylesheet" href="theme/style.css">
+  <script src="config.defaults.js"></script>
+  <script src="theme/config.theme.js"></script>
+  <script>
+    if (Nominatim_Config.Reverse_Only) {
+      window.location.pathname = window.location.pathname.replace('search.html', 'reverse.html');
+    }
+  </script>
+  <script defer="" src="build/bundle.js"></script>
+</head>
+<body>
+  <header class="container-fluid">
+    <nav class="navbar navbar-expand-sm navbar-light">
+      <div class="container-fluid">
+        <div class="navbar-brand svelte-1q88nx"><a href="search.html" class=""><img alt="logo" id="theme-logo" src="theme/logo.png" class="svelte-1q88nx"> <h1 class="svelte-1q88nx">Nominatim</h1></a></div> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item svelte-1q88nx"><a href="search.html" class="nav-link active">Search</a></li>
+            <li class="nav-item svelte-1q88nx"><a href="reverse.html?lat=19.97335&amp;lon=-0.17578" class="nav-link ">Reverse</a></li>
+            <li class="nav-item svelte-1q88nx"><a href="details.html" class="nav-link ">Search By ID</a></li>
+          </ul>
+        </div>
+        <ul class="navbar-nav">
+          <li class="nav-item svelte-1q88nx"><a href="about.html" class="nav-link ">About &amp; Help</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <section class="page-title-section svelte-1q88nx">
+    <h2>search</h2>
+  </section>
+  <section class="search-section svelte-1q88nx">
+    <ul class="nav nav-tabs svelte-1u2ltgo" role="tablist">
+      <li class="nav-item" role="presentation"><a class="nav-link svelte-1u2ltgo active" data-bs-toggle="tab" href="#simple" aria-selected="true" role="tab">Simple</a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link svelte-1u2ltgo" data-bs-toggle="tab" href="#structured" aria-selected="false" tabindex="-1" role="tab">Structured</a></li>
+    </ul>
+    <div class="tab-content py-2">
+      <div class="tab-pane active" id="simple" role="tabpanel">
+        <form class="form-inline" role="search" accept-charset="UTF-8" action="">
+          <div class="row g-2">
+            <div class="col-auto"><input id="q" name="q" type="text" class="form-control form-control-sm svelte-1u2ltgo" placeholder="Search"></div>
+            <div class="col-auto"><button type="submit" class="btn btn-primary btn-sm mx-1">Search</button> <input type="hidden" name="viewbox" value=""> <input type="hidden" name="dedupe" value="1"> <input type="hidden" name="bounded" value=""> <input type="hidden" name="accept-language" value=""> <input type="hidden" name="countrycodes" value="" pattern="^[a-zA-Z]{2}(,[a-zA-Z]{2})*$"> <input type="hidden" name="limit" value=""> <input type="hidden" name="polygon_threshold" value=""></div>
+          </div>
+        </form>
+      </div>
+      <div class="tab-pane" id="structured" role="tabpanel">
+        <form class="form-inline" role="search" accept-charset="UTF-8" action="">
+          <div class="row g-2">
+            <div class="col-auto"><input name="street" type="text" class="form-control form-control-sm me-1" placeholder="House number/Street"></div>
+            <div class="col-auto"><input name="city" type="text" class="form-control form-control-sm me-1" placeholder="City"></div>
+            <div class="col-auto"><input id="county" name="county" type="text" class="form-control form-control-sm me-1" placeholder="County"></div>
+            <div class="col-auto"><input name="state" type="text" class="form-control form-control-sm me-1" placeholder="State"></div>
+            <div class="col-auto"><input name="country" type="text" class="form-control form-control-sm me-1" placeholder="Country"></div>
+            <div class="col-auto"><input name="postalcode" type="text" class="form-control form-control-sm me-1" placeholder="Postal Code"></div>
+            <div class="col-auto"><button type="submit" class="btn btn-primary btn-sm">Search</button> <input type="hidden" name="viewbox" value=""> <input type="hidden" name="dedupe" value="1"> <input type="hidden" name="bounded" value=""> <input type="hidden" name="accept-language" value=""> <input type="hidden" name="countrycodes" value="" pattern="^[a-zA-Z]{2}(,[a-zA-Z]{2})*$"> <input type="hidden" name="limit" value=""> <input type="hidden" name="polygon_threshold" value=""></div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <details id="searchAdvancedOptions" class="svelte-1u2ltgo">
+      <summary><small>Advanced options</small></summary>
+      <ul class="svelte-1u2ltgo">
+        <li class="svelte-1u2ltgo">
+          <div class="form-check form-check-inline"><label class="form-check-label svelte-1u2ltgo" for="use_viewbox">apply viewbox</label> <input type="checkbox" class="form-check-input api-param-setting" id="use_viewbox"></div>
+        </li>
+        <li class="svelte-1u2ltgo">
+          <div class="form-check form-check-inline"><label class="form-check-label svelte-1u2ltgo" for="option_bounded">bounded to viewbox</label> <input type="checkbox" class="form-check-input api-param-setting" id="option_bounded"></div>
+        </li>
+        <li class="svelte-1u2ltgo">
+          <div class="form-check form-check-inline"><label class="form-check-label svelte-1u2ltgo" for="option_dedupe">deduplicate results</label> <input type="checkbox" class="form-check-input api-param-setting" id="option_dedupe"></div>
+        </li>
+        <li class="svelte-1u2ltgo"><label for="option_limit" class="svelte-1u2ltgo">Maximum number of results</label> <input type="number" class="form-control form-control-sm d-inline w-auto api-param-setting" data-api-param="limit" id="option_limit" min="1" max="50"></li>
+        <li class="svelte-1u2ltgo"><label for="option_polygon_threshold" class="svelte-1u2ltgo">Polygon simplification</label> <input type="number" class="form-control form-control-sm d-inline w-auto api-param-setting" data-api-param="polygon_threshold" id="option_polygon_threshold" min="0.0" max="1.0" step="0.001"></li>
+        <li class="svelte-1u2ltgo"><label for="accept_lang" class="svelte-1u2ltgo">Languages</label> <input type="text" placeholder="e.g. en,zh-Hant" class="form-control form-control-sm d-inline w-auto api-param-setting" data-api-param="accept-language" id="accept_lang" size="15"></li>
+        <li class="svelte-1u2ltgo"><label for="option_ccode" class="svelte-1u2ltgo">Country Codes</label> <input type="text" placeholder="e.g. de,gb" class="form-control form-control-sm d-inline w-auto api-param-setting" data-api-param="countrycodes" id="option_ccode" size="15" pattern="^[a-zA-Z]{2}(,[a-zA-Z]{2})*$"></li>
+      </ul>
+    </details>
+  </section>
+  <div id="last-updated" class="container-fluid py-2 px-4 mb-3 svelte-1i1228w">
+    <div id="loading" class="py-2 px-4 svelte-1i1228w">
+      <div class="spinner-border spinner-border-sm text-primary me-1" role="status"></div> Loading data from API ...</div>
+    <div class="row">
+      <div class="col-sm-6"></div>
+      <div class="col-sm-6 text-end">Data last updated: <abbr id="data-date" title="2024-05-12T02:10:50+00:00 (UTC timezone)">1 minute ago</abbr> (<a href="status.html" class="">Details</a>)</div>
+    </div>
+  </div>
+  <div id="content" class="svelte-1d53ob0">
+    <div class="sidebar svelte-1d53ob0">
+      <div id="welcome">
+        <h2>Welcome to Nominatim</h2>
+        <p> This is the debugging interface for the search engine used on the <a href="https://www.openstreetmap.org">OpenStreetMap</a> website. </p> <a href="about.html">More information</a> </div>
+    </div>
+    <div id="map-wrapper" class="svelte-1d53ob0">
+      <div id="map-position" class="svelte-1k961ph">
+        <div id="map-position-inner">map center: 19.97335,-0.17578 <a target="_blank" rel="noreferrer" href="https://openstreetmap.org/#map=2/19.97335/-0.17578">view on osm.org</a> <br> map zoom: 2 <br> viewbox: 179.82522,58.81374,179.82322,-30.75128 <br> last click: undefined <br> mouse position: 57.29092,-245.30312</div>
+        <div id="map-position-close" class="svelte-1k961ph"><a href="#hide">hide</a></div>
+      </div>
+      <div id="map" class="svelte-1vbvdrk leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag" tabindex="0" style="position: relative;">
+        <div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(-6px, -156px, 0px);">
+          <div class="leaflet-pane leaflet-tile-pane">
+            <div class="leaflet-layer " style="z-index: 1; opacity: 1;">
+              <div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 18; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" src="https://tile.openstreetmap.org/2/1/1.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(454px, 108px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/2/1.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(710px, 108px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/1/0.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(454px, -148px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/2/0.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(710px, -148px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/1/2.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(454px, 364px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/2/2.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(710px, 364px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/0/1.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(198px, 108px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/3/1.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(966px, 108px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/0/0.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(198px, -148px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/3/0.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(966px, -148px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/0/2.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(198px, 364px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/3/2.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(966px, 364px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/3/1.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-58px, 108px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/0/1.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1222px, 108px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/3/0.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-58px, -148px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/0/0.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1222px, -148px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/3/2.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-58px, 364px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/2/0/2.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1222px, 364px, 0px); opacity: 1;"></div>
+            </div>
+          </div>
+          <div class="leaflet-pane leaflet-overlay-pane"></div>
+          <div class="leaflet-pane leaflet-shadow-pane"></div>
+          <div class="leaflet-pane leaflet-marker-pane"></div>
+          <div class="leaflet-pane leaflet-tooltip-pane"></div>
+          <div class="leaflet-pane leaflet-popup-pane"></div>
+          <div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(511.5px, 454px, 0px) scale(2);"></div>
+        </div>
+        <div class="leaflet-control-container">
+          <div class="leaflet-top leaflet-left">
+            <div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="#" title="Zoom in" role="button" aria-label="Zoom in" aria-disabled="false"><span aria-hidden="true">+</span></a><a class="leaflet-control-zoom-out" href="#" title="Zoom out" role="button" aria-label="Zoom out" aria-disabled="false"><span aria-hidden="true">−</span></a></div>
+          </div>
+          <div class="leaflet-top leaflet-right"><button id="show-map-position" class="leaflet-bar btn btn-sm btn-outline-secondary svelte-1vbvdrk leaflet-control">show map bounds</button></div>
+          <div class="leaflet-bottom leaflet-left"></div>
+          <div class="leaflet-bottom leaflet-right">
+            <div class="leaflet-control-minimap leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom leaflet-control" tabindex="0" style="width: 150px; height: 150px; position: relative;">
+              <div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);">
+                <div class="leaflet-pane leaflet-tile-pane">
+                  <div class="leaflet-layer " style="z-index: 1; opacity: 1;">
+                    <div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 13; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" src="https://tile.openstreetmap.org/0/0/0.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-56px, -41px, 0px); opacity: 1;"></div>
+                  </div>
+                </div>
+                <div class="leaflet-pane leaflet-overlay-pane"><svg pointer-events="none" class="leaflet-zoom-animated" width="173" height="173" viewBox="-14 -14 173 173" style="transform: translate3d(-14px, -14px, 0px);"><g><path class="leaflet-interactive" stroke="#ff7800" stroke-opacity="1" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="#ff7800" fill-opacity="0.2" fill-rule="evenodd" d="M160 110L-15 110L-15 35L160 35z"></path><path class="leaflet-interactive" stroke="#000000" stroke-opacity="0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="#000000" fill-opacity="0" fill-rule="evenodd" d="M160 149L-15 149L-15 -4L160 -4z"></path></g></svg></div>
+                <div class="leaflet-pane leaflet-shadow-pane"></div>
+                <div class="leaflet-pane leaflet-marker-pane"></div>
+                <div class="leaflet-pane leaflet-tooltip-pane"></div>
+                <div class="leaflet-pane leaflet-popup-pane"></div>
+              </div>
+              <div class="leaflet-control-container">
+                <div class="leaflet-top leaflet-left"></div>
+                <div class="leaflet-top leaflet-right"></div>
+                <div class="leaflet-bottom leaflet-left"></div>
+                <div class="leaflet-bottom leaflet-right"></div>
+              </div><a class="leaflet-control-minimap-toggle-display leaflet-control-minimap-toggle-display-bottomright" href="#" title="Hide MiniMap" style="width: 19px; height: 19px;"></a></div>
+            <div class="leaflet-control-attribution leaflet-control"><a href="https://leafletjs.com/">Leaflet</a> <span aria-hidden="true">|</span> <a href="https://osm.org/copyright">OpenStreetMap contributors</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="svelte-1f2bd8l">
+    <p class="disclaimer svelte-1f2bd8l">Addresses and postcodes are approximate. Blue circle is search result, smaller red circle is search position (reverse geocoding).</p>
+    <p class="copyright svelte-1f2bd8l">© <a href="https://osm.org/copyright">OpenStreetMap</a> contributors</p>
+  </footer>
+</body>
+</html>
+</html>

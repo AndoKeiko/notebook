@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+
+    <script
+      src='https://www.bing.com/api/maps/mapcontrol?callback=initMap&key=AqjcOy5RSUYE1PdyrNDxWjk0kkezoIW_coZaPFzxZhZxbhmL3hWfeYJqSGbjhWz2&callback=loadMapScenario'
+      async defer></script>
+    <style>
+        #myMap {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+    <script>
+var map;
+
+function loadMapScenario() {
+    map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+        credentials: 'YourBingMapsAPIKey'
+    });
+
+    Microsoft.Maps.Events.addHandler(map, 'click', function(e) {
+        var location = e.location;
+        reverseGeocode(location);
+    });
+}
+
+function reverseGeocode(location) {
+    var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+    var reverseGeocodeRequestOptions = {
+        location: location,
+        callback: function(result) {
+            if (result && result.results && result.results.length > 0) {
+                var address = result.results[0].address.formattedAddress;
+                console.log('Clicked address: ' + address);
+                alert('Clicked address: ' + address);
+            } else {
+                console.log('No address found for this location.');
+                alert('No address found for this location.');
+            }
+        },
+        errorCallback: function(e) {
+            console.log('Error during reverse geocoding.');
+            alert('Error during reverse geocoding.');
+        }
+    };
+
+    searchManager.reverseGeocode(reverseGeocodeRequestOptions);
+}
+    </script>
+  </head>
+  <body>
+    <div id="myMap"></div>
+  </body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>お絵描きアプリ</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous">
+    <style>
+      #draw-area {
+        margin: 0 auto;
+      }
+      .draw-btn-box {
+        display: flex;
+        justify-content: space-between;
+        width: 25rem;
+        margin: 2rem auto;
+      }
+      .draw-btn-box li {
+        width: 10rem;
+        height: 4rem;
+        line-height: 4rem;
+        background-color: rgb(123, 123, 123);
+        text-align: center;
+      }
+.pallet_box {
+  width: 100%;
+  display: flex;
+  gap: 1rem .3rem;
+  justify-content: center;
+  margin: 1rem 0 0 0;
+}
+.pallet_box > label {
+  height: 1.1rem;
+  width: 1.1rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.pallet_box.active {
+  display: inline-flex;
+  position: absolute;
+  bottom: .8rem;
+  gap: 1rem .3rem;
+  background-color: #fff;
+}
+input[type="radio"][name="color"]{
+  display: none;
+}
+.img-draw-box {
+  text-align: center;
+}
+#upfile02 {
+  margin-top: 1rem;
+}
+#draw_list {
+  display: flex;
+  justify-content: space-between;
+  max-width: 85%;
+  gap:0 1%;
+  margin: 0 auto;
+}
+#draw_list:after {
+    content: "";
+    max-width: 24%;
+}
+.draw-img {
+  width: 24%;
+}
+
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="img-draw-box">
+      <canvas id="draw-area" class="draw-area" width="500" height="500"
+        style="border:1px solid #000;"></canvas>
+      <input type="file" id="upfile02">
+      <form class="pallet_box">
+        <input type="radio" id="primary" name="color" value="#0d6efd">
+        <label for="primary" class="bg-primary"></label>
+        <input type="radio" id="secondary" name="color" value="#0d6efd">
+        <label for="secondary" class="bg-secondary"></label>
+        <input type="radio" id="success" name="color" value="#0d6efd">
+        <label for="primary" class="bg-success"></label>
+        <input type="radio" id="danger" name="color" value="#0d6efd">
+        <label for="secondary" class="bg-danger"></label>
+        <input type="radio" id="warning" name="color" value="#0d6efd">
+        <label for="secondary" class="bg-warning"></label>
+        <input type="radio" id="info" name="color" value="#0d6efd">
+        <label for="secondary" class="bg-info"></label>
+        <input type="radio" id="dark" name="color" value="#212529">
+        <label for="dark" class="bg-dark"></label>
+      </form>
+      <ul class="draw-btn-box">
+        <li id="draw-clear-btn" id="draw-clear-btn">Clear</li>
+        <li id="draw-save-btn" id="draw-save-btn">Save</li>
+      </ul>
+    </div>
+    <main class="main" id="main">
+      <div id="draw_list" class="draw_list">
+        <!-- ここに追加データが挿入される -->
+
+      </div>
+    </main>
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="./js/app.js" type="module"></script>
+    <script>
+      let currentColor = '#000000'; // 黒色
+      //canva
+      const canvas = document.getElementById('draw-area');
+      const context = canvas.getContext('2d');
+  
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+  
+      canvas.addEventListener('mousedown', (e) => {
+          isDrawing = true;
+          [lastX, lastY] = [e.offsetX, e.offsetY];
+      });
+  
+      canvas.addEventListener('mousemove', (e) => {
+          if (!isDrawing) return;
+          context.beginPath();
+          context.moveTo(lastX, lastY);
+          context.lineTo(e.offsetX, e.offsetY);
+          context.strokeStyle = currentColor;
+          context.stroke();
+          [lastX, lastY] = [e.offsetX, e.offsetY];
+      });
+  
+      canvas.addEventListener('mouseup', () => {
+          isDrawing = false;
+      });
+  
+      canvas.addEventListener('mouseout', () => {
+          isDrawing = false;
+      });
+
+      $("#draw-clear-btn").on("click", function(){
+        context.clearRect(0, 0, canvas.width, canvas.height);
+      });
+      $('input[type="radio"][name="color"]').on('change', function() {
+          currentColor = $(this).val(); // ラジオボタンのvalue属性から色を取得
+      });
+      $("#draw-save-btn").on("click", function(){
+
+      });
+            //ファイルアップ
+      let imageUrl;
+      $(function () {
+        $('#upfile02').change(function (e) {
+          var file = e.target.files[0];
+          var reader = new FileReader();
+          if (file.type.indexOf('image') < 0) {
+            alert("画像ファイルを指定してください。");
+            return false;
+          }
+          reader.onload = function (e) {
+            let img = new Image();
+            img.onload = function() {
+              let canvas = document.getElementById('draw-area');
+              let ctx = canvas.getContext('2d');
+              // canvas.width = img.width; // キャンバスのサイズを画像のサイズに合わせる
+              // canvas.height = img.height;
+              ctx .drawImage(img, 0, 0);
+              let dataUrl = canvas.toDataURL('image/png');
+              console.log(dataUrl); 
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+  </script>
+    <script>
+
+  </script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メモパッド</title>
+    <style>
+
+
+    </style>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+      integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+  <body>
+    <div id="editor" contenteditable="true"></div>
+    <!-- JavaScript の読み込み（コピーしたタグを貼り付け） -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+      integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- highlight.js の初期化 -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const editor = document.getElementById('editor');
+
+        editor.addEventListener('paste', function (e) {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            insertTextAsCodeSnippet(text);
+        });
+
+        function insertTextAsCodeSnippet(text) {
+            const codeSnippet = document.createElement('pre');
+            codeSnippet.textContent = text;
+            // codeSnippet.style.background = '#f5f5f5';
+            codeSnippet.style.border = '1px solid #ddd';
+            codeSnippet.style.padding = '10px';
+            codeSnippet.style.overflowX = 'auto';
+
+            editor.appendChild(codeSnippet);
+            hljs.highlightBlock(codeSnippet);
+        }
+
+    });
+
+    </script>
+  </body>
+</html>

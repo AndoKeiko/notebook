@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+
+<dl>
+  <dt>
+    <label for="email">Email</label>
+  </dt>
+  <dd>
+    <input type="email" id="email">
+  </dd>
+</dl>
+<dl>
+  <dt>
+    <label for="password">Password</label>
+  </dt>
+  <dd>
+    <input type="password" id="password">
+  </dd>
+</dl>
+
+
+  <script type="module">
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+  
+    const auth = getAuth(app);
+
+    const firebaseConfig = {
+    apiKey: "AIzaSyAtRdQQ1imVBgWwQPYpPnuIU7d_-jRPlRs",
+    authDomain: "gsdemo-4d319.firebaseapp.com",
+    projectId: "gsdemo-4d319",
+    storageBucket: "gsdemo-4d319.appspot.com",
+    messagingSenderId: "270823072945",
+    appId: "1:270823072945:web:9c4b3c8932d8cb24a2ae90"
+  };
+  
+    // ユーザー登録
+    function register(email, password) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // 登録成功
+          console.log("登録成功:", userCredential.user);
+        })
+        .catch((error) => {
+          console.error("登録失敗:", error);
+        });
+    }
+  
+    // ログイン
+    function login(email, password) {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // ログイン成功
+          console.log("ログイン成功:", userCredential.user);
+        })
+        .catch((error) => {
+          console.error("ログイン失敗:", error);
+        });
+    }
+  </script>
+</body>
+</html>
