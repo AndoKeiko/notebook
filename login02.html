@@ -12,7 +12,11 @@
   href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap"
   rel="stylesheet">
 </head>
-
+<style>
+  #note-board .note-board-item {
+    overflow: hidden!important;
+  }
+</style>
 <body>
 
 
@@ -40,11 +44,11 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChang
 //###############################################
 const firebaseConfig = {
   apiKey: "AIzaSyCqdfsPbivh4W3syxeyfR7PTNX3VVQg2yU",
-    authDomain: "notebook-e4868.firebaseapp.com",
-    projectId: "notebook-e4868",
-    storageBucket: "notebook-e4868.appspot.com",
-    messagingSenderId: "362022666601",
-    appId: "1:362022666601:web:a53a69ff45bb752e117df8"
+  authDomain: "notebook-e4868.firebaseapp.com",
+  projectId: "notebook-e4868",
+  storageBucket: "notebook-e4868.appspot.com",
+  messagingSenderId: "362022666601",
+  appId: "1:362022666601:web:a53a69ff45bb752e117df8"
 };
 const app = initializeApp(firebaseConfig);
 

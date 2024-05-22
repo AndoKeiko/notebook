@@ -200,7 +200,8 @@ onAuthStateChanged(auth, (user) => {
             $("#html-code").val('');
             $("#css-code").val('');
             $("#js-code").val('');
-            $("#preview-frame").html('');
+            $('#image-board').empty();
+            $('#preview-frame').empty();
             $("#paste-area").html('');
           }).catch((error) => {
             console.error("Update failed: " + error.message);
@@ -240,6 +241,7 @@ onAuthStateChanged(auth, (user) => {
             const msg = {
               order: orderIndex,
               date: currentDate,
+              color: "",
               title: $("#hidden_editor_title").val(),
               text: $("#hidden_editor_text").val(),//escapeHTML($("#editor_text").html()),
               labels: {
@@ -342,12 +344,18 @@ onAuthStateChanged(auth, (user) => {
       const msg = data.val(); //オブジェクトデータを取得し、変数msgに代入
       // console.log(msg);
       const key = data.key; //データのユニークキー（削除や更新に使用可能）
-      let html = "<div class='note-board-item' data-key='" + key + "'>";
+      let html = "<div class='note-board-item";
+      if (msg.color && msg.color.length > 0) {
+        html += " " + msg.color;
+      }
+      html += "'data-key='" + key + "'>";
       html += "<input type='checkbox' class='note-board-item-checkbox' value='" + key + "'>";
       html += "<div class='note-board-item-title'>" + msg.title + "</div>";
       html += "<div class='note-board-item-text'>" +msg.text + "</div>";
+      html += '<div class="tool_box"><a class="label" data-key="' + key + '" title="ラベルを追加"><i class="bi bi-bookmark"></i></a><a class="trash" data-key="' + key + '" title="ゴミ箱"><i class="bi bi-trash3"></i></a><a class="pallet" data-key="' + key + '" title="背景オプション"><i class="bi bi-palette"></i></a></div>';
       html += "</div>";
       $("#note-board").append(html);
+      $(".note-board-item").css("overflow","hidden");
       lastKey = data.key;
     });
     //最初にデータ取得＆onSnapshotでリアルタイムにデータを取得
@@ -358,10 +366,12 @@ onAuthStateChanged(auth, (user) => {
       const key = data.key; //データのユニークキー（削除や更新に使用可能）
       let html = "<div class='editor-board-item' data-key='" + key + "'>";
       html += "<input type='checkbox' class='editor-board-item-checkbox' value='" + key + "'>";
-      html += "<div>" + msg.css + "</div>";
+      html += "<div>" + msg.title + "</div>";
       html += "<div>" + msg.html + "</div>";
       // html += "<div>" + escapeHtml(msg.html) + "</div>";
+      html += "<div>" + msg.css + "</div>";
       html += "<div>" + msg.js + "</div>";
+      html += '<div class="tool_box"><a class="label" data-key="' + key + '" title="ラベルを追加"><i class="bi bi-bookmark"></i></a><a class="trash" data-key="' + key + '" title="ゴミ箱"><i class="bi bi-trash3"></i></a><a class="pallet" data-key="' + key + '" title="背景オプション"><i class="bi bi-palette"></i></a></div>';
       html += "</div>";
       $("#editor-board").append(html);
       lastKey02 = data.key;
@@ -375,8 +385,9 @@ onAuthStateChanged(auth, (user) => {
       let html = "<div class='image-board-item' data-key='" + key + "'>";
       html += "<input type='checkbox' class='image-board-item-checkbox' value='" + key + "'>";
       html += "<img src='" + msg.src + "'/>";
+      html += '<div class="tool_box"><a class="label" data-key="' + key + '" title="ラベルを追加"><i class="bi bi-bookmark"></i></a><a class="trash" data-key="' + key + '" title="ゴミ箱"><i class="bi bi-trash3"></i></a><a class="pallet" data-key="' + key + '" title="背景オプション"><i class="bi bi-palette"></i></a></div>';
       html += "</div>";
-      $("#image-board").append(html);
+      $("#image-board02").append(html);
       lastKey03 = data.key;
     });
 
@@ -409,38 +420,127 @@ onAuthStateChanged(auth, (user) => {
       });
     }
 
-    // if ($('editor_btn_delete').length > 0) {
-    //   document.getElementById('editor_btn_delete').addEventListener('click', deleteSelectedItems);
+    if ($('#editor_btn_delete').length > 0) {
+      document.getElementById('editor_btn_delete').addEventListener('click', deleteSelectedItems);
+    }
+      // $(document).on("click", ".location_label", function () {
+      //   let memoPage = $(this).closest('.memo_page');
+      //   let dataKey = memoPage.attr('data-key');
+      //   console.log(dataKey);
+      //   $('#add_label_wrap03').addClass('active');
+      //   $('#add_label_wrap03').attr('data-key', dataKey);
+      //   //     // Firebaseからデータを取得
+      //   const mapRef = ref(db, "users/" + uid + "/note/" + dataKey);
+      //   onValue(mapRef, (snapshot) => {
+      //     const msg = snapshot.val();
+      //     if (msg) {
+      //       // order に基づいてメモの DOM 要素を並び替え
+      //       let lat = msg.location.lat;
+      //       let lon = msg.location.lon;
+      //       let geocode = msg.location.geocode
+      //       $("#lat_hidden").val(lat);
+      //       $("#lon_hidden").val(lon);
+      //       $("#geo_hidden").val(geocode);
+      //       // マップの中心を更新
+      //       // let map = new Bmap("#map");
+      //       // map.startMap(lat, lon, "load", 15);
+      //     } else {
+      //       // lat = data.coords.latitude;
+      //       // lon = data.coords.longitude;
+      //     }
+      //   });
+      //   updateLocation();
+      // });
+   
+      $(document).on("click", ".trash", function () { //削除
+        const parentItem = $(this).closest('.note-board-item, .editor-board-item, .image-board-item');
+        const key = parentItem.data('key');
+        const parentClass = parentItem.attr('class');
+      
+        let dbRef;
+        if (parentClass.includes('note-board-item')) {
+          dbRef = ref(db, "users/" + uid + "/note/" + key);
+        } else if (parentClass.includes('editor-board-item')) {
+          dbRef = ref(db, "users/" + uid + "/source/" + key);
+        } else if (parentClass.includes('image-board-item')) {
+          dbRef = ref(db, "users/" + uid + "/img/" + key);
+        }
+        remove(dbRef);
+        //firebase.database().ref('memo/' + memoId).remove();
+      });
+      $(document).on("click", ".pallet", function () {//カラー
+        const memo_box = $(this).closest('.note-board-item, .editor-board-item, .image-board-item');
+        const palletBox = memo_box.find(".pallet_box");
+        palletBox.toggleClass("active");
+        console.log(memo_box.find(".pallet_box").children());
+        if (palletBox.find(".pallet_box").children().length == 0) {
+          let color_class = [
+            "bg-primary text-white",
+            "bg-secondary text-white",
+            "bg-success text-white",
+            "bg-danger text-white",
+            "bg-warning text-dark",
+            "bg-info text-dark",
+            "bg-light text-dark",
+            "bg-dark text-white",
+            "bg-white text-dark"
+          ];
+          console.log(color_class);
+          let html = '<div class="pallet_box">';
+          for (let i = 0; i < color_class.length; i++) {
+            html += '<div class="' + color_class[i] + '" data-color="' + color_class[i] + '"></div>';
+          }
+          html += '</div>';
+  
+          if (palletBox.length === 0) {
+            memo_box.append(html);
+          }
+        }
+        // $(this).on("mouseleave", function () {
+        //   palletBox.removeClass("active");
+        // });
+      }); 
+      $(document).on("click",".pallet_box > div", function () { //色の選択
+        //色の選択ボタンを押した時
 
-    //   $(document).on("click", ".location_label", function () {
-    //     let memoPage = $(this).closest('.memo_page');
-    //     let dataKey = memoPage.attr('data-key');
-    //     console.log(dataKey);
-    //     $('#add_label_wrap03').addClass('active');
-    //     $('#add_label_wrap03').attr('data-key', dataKey);
-    //     //     // Firebaseからデータを取得
-    //     const mapRef = ref(db, "users/" + uid + "/note/" + dataKey);
-    //     onValue(mapRef, (snapshot) => {
-    //       const msg = snapshot.val();
-    //       if (msg) {
-    //         // order に基づいてメモの DOM 要素を並び替え
-    //         let lat = msg.location.lat;
-    //         let lon = msg.location.lon;
-    //         let geocode = msg.location.geocode
-    //         $("#lat_hidden").val(lat);
-    //         $("#lon_hidden").val(lon);
-    //         $("#geo_hidden").val(geocode);
-    //         // マップの中心を更新
-    //         // let map = new Bmap("#map");
-    //         // map.startMap(lat, lon, "load", 15);
-    //       } else {
-    //         // lat = data.coords.latitude;
-    //         // lon = data.coords.longitude;
-    //       }
-    //     });
-    //     updateLocation();
-    //   });
-    // }
+        const parentItem = $(this).closest('.note-board-item, .editor-board-item, .image-board-item');
+        const pallet_box = $(this).closest(".pallet_box");
+        // pallet_box.removeClass("active");
+        const colorClass = $(this).data("color");
+        console.log(colorClass);
+        // let class_name = $(this).attr('class'); 
+        parentItem.addClass(colorClass);
+        const key = parentItem.data('key');
+        console.log(key);
+        const parentClass = parentItem.attr('class');
+
+        
+        let dbRef;
+        if (parentClass.includes('note-board-item')) {
+          dbRef = ref(db, "users/" + uid + "/note/" + key);
+        } else if (parentClass.includes('editor-board-item')) {
+          dbRef = ref(db, "users/" + uid + "/source/" + key);
+        } else if (parentClass.includes('image-board-item')) {
+          dbRef = ref(db, "users/" + uid + "/img/" + key);
+        }
+        if (dbRef) {
+          get(dbRef).then((snapshot) => {
+            if (snapshot.exists()) {
+              const data = snapshot.val();
+              data.color = colorClass; // 色を更新
+              update(dbRef, data).then(() => {
+                console.log("記事の更新に成功しました！");
+              }).catch((error) => {
+                console.error("記事の更新に失敗しました: ", error);
+              });
+            } else {
+              console.log("記事が見つかりませんでした。");
+            }
+          }).catch((error) => {
+            console.error("データの取得に失敗しました: ", error);
+          });
+        }
+      });
     //サイドメニュー
     const sideRef = ref(db, "users/" + uid + "/note_label");
     let html2;
